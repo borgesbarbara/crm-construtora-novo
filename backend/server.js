@@ -10,7 +10,6 @@ const { createClient } = require('@supabase/supabase-js');
 const MetaAdsAPI = require('./meta-ads-api');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const WhatsAppService = require('./whatsapp-service');
 require('dotenv').config();
 
 const app = express();
@@ -2683,97 +2682,21 @@ const io = new Server(server, {
   }
 });
 
-// Inicializar WhatsApp Service
-let whatsappService = null;
-
 // Socket.IO connection handling
 io.on('connection', (socket) => {
   console.log('🔌 Cliente conectado:', socket.id);
-  
-  // Enviar status atual do WhatsApp
-  if (whatsappService) {
-    socket.emit('whatsapp:status', whatsappService.getStatus());
-  }
   
   socket.on('disconnect', () => {
     console.log('🔌 Cliente desconectado:', socket.id);
   });
 });
 
-// === ROTAS DO WHATSAPP ===
-app.get('/api/whatsapp/status', authenticateToken, (req, res) => {
-  if (!whatsappService) {
-    return res.json({ status: 'not_initialized', isConnected: false });
-  }
-  res.json(whatsappService.getStatus());
-});
-
-app.post('/api/whatsapp/connect', authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const forceReset = req.body?.forceReset || false;
-    if (!whatsappService) {
-      whatsappService = new WhatsAppService(io, supabase);
-    }
-    await whatsappService.connectToWhatsApp(forceReset);
-    res.json({ message: 'Conexão iniciada' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/whatsapp/disconnect', authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    if (whatsappService) {
-      await whatsappService.disconnect();
-    }
-    res.json({ message: 'WhatsApp desconectado com sucesso!' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/whatsapp/send-message', authenticateToken, async (req, res) => {
-  try {
-    const { jid, message } = req.body;
-    
-    if (!whatsappService || !whatsappService.isConnected) {
-      return res.status(400).json({ error: 'WhatsApp não está conectado' });
-    }
-    
-    const result = await whatsappService.sendMessage(jid, message);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/whatsapp/messages/:jid', authenticateToken, async (req, res) => {
-  try {
-    const { jid } = req.params;
-    const { limit = 50 } = req.query;
-    
-    console.log('🔍 Buscando mensagens para JID:', jid);
-    
-    if (!whatsappService) {
-      console.log('❌ WhatsApp Service não inicializado');
-      return res.json([]);
-    }
-    
-    const messages = await whatsappService.getMessages(jid, parseInt(limit));
-    console.log('📨 Mensagens encontradas:', messages.length);
-    res.json(messages);
-  } catch (error) {
-    console.error('❌ Erro ao buscar mensagens:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // Inicializar servidor
 server.listen(PORT, async () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`🌐 Acesse: http://localhost:${PORT}`);
   console.log(`🗄️ Usando Supabase como banco de dados`);
-  console.log(`📱 WhatsApp Service inicializado`);
   
   // Verificar conexão com Supabase
   try {
