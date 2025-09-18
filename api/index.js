@@ -167,6 +167,84 @@ const normalizarEmail = (email) => {
   return email.toLowerCase().trim();
 };
 
+// Função para buscar dados relacionados sem usar joins
+const buscarDadosRelacionados = async (dados, tipoRelacao) => {
+  if (!dados || dados.length === 0) return dados;
+
+  try {
+    switch (tipoRelacao) {
+      case 'consultor':
+        // Buscar nomes dos consultores
+        const consultorIds = [...new Set(dados.map(item => item.consultor_id).filter(id => id))];
+        if (consultorIds.length > 0) {
+          const { data: consultores } = await supabase
+            .from('consultores')
+            .select('id, nome')
+            .in('id', consultorIds);
+          
+          const consultoresMap = consultores?.reduce((map, c) => {
+            map[c.id] = c.nome;
+            return map;
+          }, {}) || {};
+
+          return dados.map(item => ({
+            ...item,
+            consultor_nome: consultoresMap[item.consultor_id] || null
+          }));
+        }
+        break;
+
+      case 'paciente':
+        // Buscar dados dos pacientes
+        const pacienteIds = [...new Set(dados.map(item => item.paciente_id).filter(id => id))];
+        if (pacienteIds.length > 0) {
+          const { data: pacientes } = await supabase
+            .from('pacientes')
+            .select('id, nome, telefone, cpf')
+            .in('id', pacienteIds);
+          
+          const pacientesMap = pacientes?.reduce((map, p) => {
+            map[p.id] = p;
+            return map;
+          }, {}) || {};
+
+          return dados.map(item => ({
+            ...item,
+            paciente_nome: pacientesMap[item.paciente_id]?.nome || null,
+            paciente_telefone: pacientesMap[item.paciente_id]?.telefone || null,
+            paciente_cpf: pacientesMap[item.paciente_id]?.cpf || null
+          }));
+        }
+        break;
+
+      case 'clinica':
+        // Buscar nomes das clínicas
+        const clinicaIds = [...new Set(dados.map(item => item.clinica_id).filter(id => id))];
+        if (clinicaIds.length > 0) {
+          const { data: clinicas } = await supabase
+            .from('clinicas')
+            .select('id, nome')
+            .in('id', clinicaIds);
+          
+          const clinicasMap = clinicas?.reduce((map, c) => {
+            map[c.id] = c.nome;
+            return map;
+          }, {}) || {};
+
+          return dados.map(item => ({
+            ...item,
+            clinica_nome: clinicasMap[item.clinica_id] || null
+          }));
+        }
+        break;
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados relacionados:', error);
+  }
+
+  return dados;
+};
+
 // Middleware especial para upload que preserva headers
 const authenticateUpload = (req, res, next) => {
   // Para upload com FormData, o header pode vir em minúsculas
@@ -256,10 +334,7 @@ app.post('/api/login', async (req, res) => {
   if (typeof email === 'string' && email.includes('@')) {
       const { data: usuarios, error } = await supabase
         .from('usuarios')
-        .select(`
-          *,
-          consultores(nome, telefone)
-        `)
+        .select('*')
         .eq('email', email)
         .eq('ativo', true)
         .limit(1);
@@ -1051,10 +1126,7 @@ app.get('/api/pacientes', authenticateToken, async (req, res) => {
   try {
     let query = supabase
       .from('pacientes')
-      .select(`
-        *,
-        consultores(nome)
-      `)
+      .select('*')
       .order('created_at', { ascending: false });
 
     // Se for consultor, filtrar pacientes atribuídos a ele OU vinculados através de agendamentos
@@ -1087,7 +1159,7 @@ app.get('/api/pacientes', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(paciente => ({
       ...paciente,
-      consultor_nome: paciente.consultores?.nome
+      consultor_nome: null // Será preenchido por consulta separada se necessário
     }));
 
     res.json(formattedData);
@@ -1100,23 +1172,17 @@ app.get('/api/dashboard/pacientes', authenticateToken, async (req, res) => {
   try {
     let query = supabase
       .from('pacientes')
-      .select(`
-        *,
-        consultores(nome)
-      `)
+      .select('*')
       .order('created_at', { ascending: false });
 
     const { data, error } = await query;
 
     if (error) throw error;
     
-    // Reformatar dados para compatibilidade com frontend
-    const formattedData = data.map(paciente => ({
-      ...paciente,
-      consultor_nome: paciente.consultores?.nome
-    }));
+    // Buscar dados relacionados dos consultores
+    const dadosComConsultores = await buscarDadosRelacionados(data, 'consultor');
 
-    res.json(formattedData);
+    res.json(dadosComConsultores);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1550,12 +1616,7 @@ app.get('/api/agendamentos', authenticateToken, async (req, res) => {
   try {
     let query = supabase
       .from('agendamentos')
-      .select(`
-        *,
-        pacientes(nome, telefone),
-        consultores(nome),
-        clinicas(nome)
-      `)
+      .select('*')
       .order('data_agendamento', { ascending: false })
       .order('horario');
 
@@ -1587,12 +1648,7 @@ app.get('/api/dashboard/agendamentos', authenticateToken, async (req, res) => {
   try {
     let query = supabase
       .from('agendamentos')
-      .select(`
-        *,
-        pacientes(nome, telefone),
-        consultores(nome),
-        clinicas(nome)
-      `)
+      .select('*')
       .order('data_agendamento', { ascending: false })
       .order('horario');
 
@@ -1765,12 +1821,7 @@ app.get('/api/fechamentos', authenticateToken, async (req, res) => {
   try {
     let query = supabaseAdmin
       .from('fechamentos')
-      .select(`
-        *,
-        pacientes(nome, telefone, cpf),
-        consultores(nome),
-        clinicas(nome)
-      `)
+      .select('*')
       .order('data_fechamento', { ascending: false })
       .order('created_at', { ascending: false });
 
@@ -1804,12 +1855,7 @@ app.get('/api/dashboard/fechamentos', authenticateToken, async (req, res) => {
   try {
     let query = supabaseAdmin
       .from('fechamentos')
-      .select(`
-        *,
-        pacientes(nome, telefone, cpf),
-        consultores(nome),
-        clinicas(nome)
-      `)
+      .select('*')
       .order('data_fechamento', { ascending: false })
       .order('created_at', { ascending: false });
 
