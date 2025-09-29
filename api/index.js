@@ -109,9 +109,7 @@ const uploadToSupabase = async (file, retryCount = 0) => {
     const { data, error } = await Promise.race([uploadPromise, timeoutPromise]);
 
     if (error) throw error;
-    
-    console.log(`✅ Upload concluído com sucesso: ${fileName}`);
-    
+        
     // Retornar informações do arquivo
     return {
       fileName: fileName,
