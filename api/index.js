@@ -91,9 +91,7 @@ const uploadToSupabase = async (file, retryCount = 0) => {
     const timestamp = Date.now();
     const randomId = Math.round(Math.random() * 1E9);
     const fileName = `contrato-${timestamp}-${randomId}.pdf`;
-    
-    console.log(`📤 Tentando upload ${retryCount + 1}/${MAX_RETRIES + 1} - Arquivo: ${file.originalname} (${file.size} bytes)`);
-    
+        
     // Fazer upload para o Supabase Storage usando cliente admin com timeout
     const uploadPromise = supabaseAdmin.storage
       .from(STORAGE_BUCKET)
