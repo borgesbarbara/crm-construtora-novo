@@ -257,7 +257,6 @@ const authenticateUpload = (req, res, next) => {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      console.log('📤 Erro ao verificar token no upload:', err.message);
       return res.status(403).json({ error: 'Token inválido' });
     }
     req.user = user;
