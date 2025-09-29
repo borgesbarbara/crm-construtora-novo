@@ -17,7 +17,7 @@ const LandingPage = () => {
         background: 'white',
         borderRadius: '8px',
         padding: '3rem',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+        boxShadow: '0 1px 3px rgb(10, 10, 106), 0 1px 2px rgba(0, 0, 0, 0.06)',
         border: '1px solid #e5e7eb',
         width: '100%',
         maxWidth: '500px',
@@ -29,7 +29,7 @@ const LandingPage = () => {
             src={logoHorizontalPreto} 
             alt="CRM System" 
             style={{ 
-              width: '250px',
+              width: '280px',
               maxWidth: '80%',
               height: 'auto',
               marginBottom: '1.5rem',
@@ -54,7 +54,7 @@ const LandingPage = () => {
           <button
             onClick={() => navigate('/captura-lead')}
             style={{
-              background: '#1a1d23',
+              background: '#052a7b', // cor dos botoes do login "cadastrar paciente"
               color: 'white',
               border: 'none',
               padding: '1rem 2rem',
@@ -73,13 +73,13 @@ const LandingPage = () => {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Cadastrar Paciente
+            Cadastrar Clientes
           </button>
 
           <button
             onClick={() => navigate('/cadastro')}
             style={{
-              background: '#1a1d23',
+              background: '#052a7b', // cor dos botoes do login "cadastrar como consultor"
               color: 'white',
               border: 'none',
               padding: '1rem 2rem',
@@ -98,7 +98,7 @@ const LandingPage = () => {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Cadastrar como Consultor
+            Cadastrar como Corretor
           </button>
 
           <button

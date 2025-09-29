@@ -691,7 +691,7 @@ const Fechamentos = () => {
           }}>
             <div className="grid grid-3" style={{ gap: '1rem', marginBottom: '1rem' }}>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Consultor</label>
+                <label className="form-label">Corretor</label>
                 <select 
                   className="form-select"
                   value={filtroConsultor} 
@@ -752,7 +752,7 @@ const Fechamentos = () => {
                   <tr>
                     <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Data</th>
                     <th>Paciente</th>
-                    <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Consultor</th>
+                    <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Corretor</th>
                     <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Clínica</th>
                     <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Tipo</th>
                     <th style={{ textAlign: 'right', display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Valor</th>
@@ -936,7 +936,7 @@ const Fechamentos = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Consultor</label>
+                <label className="form-label">Corretor</label>
                   <select 
                     className="form-select"
                     value={novoFechamento.consultor_id || ''}

@@ -276,7 +276,7 @@ app.post('/api/login', async (req, res) => {
       console.log('🔍 Buscando consultor por email:', emailNormalizado);
       
       const { data: consultores, error } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('*')
         .eq('email', emailNormalizado)
         .limit(1);
@@ -493,7 +493,7 @@ app.get('/api/verify-token', authenticateToken, async (req, res) => {
     } else {
       // Se não achou em usuarios, buscar em consultores
       const { data: consultorData, error: errorConsultor } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('*')
         .eq('id', req.user.id)
         .eq('ativo', true)
@@ -533,7 +533,7 @@ app.get('/api/clinicas', authenticateToken, async (req, res) => {
     const { cidade, estado } = req.query;
     
     let query = supabase
-      .from('clinicas')
+      .from('imobiliarias')
       .select('*')
       .order('nome');
 
@@ -561,7 +561,7 @@ app.get('/api/clinicas/cidades', authenticateToken, async (req, res) => {
     const { estado } = req.query;
     
     let query = supabase
-      .from('clinicas')
+      .from('imobiliarias')
       .select('cidade')
       .not('cidade', 'is', null)
       .not('cidade', 'eq', '');
@@ -586,7 +586,7 @@ app.get('/api/clinicas/cidades', authenticateToken, async (req, res) => {
 app.get('/api/clinicas/estados', authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('clinicas')
+      .from('imobiliarias')
       .select('estado')
       .not('estado', 'is', null)
       .not('estado', 'eq', '');
@@ -627,7 +627,7 @@ app.post('/api/clinicas', authenticateToken, requireAdmin, async (req, res) => {
     }
     
     const { data, error } = await supabase
-      .from('clinicas')
+      .from('imobiliarias')
       .insert([{ 
         nome, 
         endereco, 
@@ -644,7 +644,7 @@ app.post('/api/clinicas', authenticateToken, requireAdmin, async (req, res) => {
       .select();
 
     if (error) throw error;
-    res.json({ id: data[0].id, message: 'Clínica cadastrada com sucesso!' });
+    res.json({ id: data[0].id, message: 'Empreendimento cadastrado com sucesso!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -672,7 +672,7 @@ app.put('/api/clinicas/:id', authenticateToken, requireAdmin, async (req, res) =
     console.log('🔧 Dados para atualizar:', updateData);
     
     const { data, error } = await supabase
-      .from('clinicas')
+      .from('imobiliarias')
       .update(updateData)
       .eq('id', id)
       .select();
@@ -691,8 +691,8 @@ app.put('/api/clinicas/:id', authenticateToken, requireAdmin, async (req, res) =
       return res.status(403).json({ error: 'Nenhuma linha atualizada! Verifique as policies do Supabase.' });
     }
     
-    console.log('✅ Clínica atualizada com sucesso:', data[0]);
-    res.json({ id: data[0].id, message: 'Clínica atualizada com sucesso!' });
+    console.log('✅ Empreendimento atualizado com sucesso:', data[0]);
+    res.json({ id: data[0].id, message: 'Empreendimento atualizado com sucesso!' });
   } catch (error) {
     console.error('❌ Erro geral:', error);
     res.status(500).json({ error: error.message });
@@ -703,7 +703,7 @@ app.put('/api/clinicas/:id', authenticateToken, requireAdmin, async (req, res) =
 app.get('/api/consultores', authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('*')
       .order('nome');
 
@@ -732,7 +732,7 @@ app.post('/api/consultores', authenticateToken, requireAdmin, async (req, res) =
     
     // Verificar se email já existe
     const { data: emailExistente, error: emailError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('email', emailNormalizado)
       .limit(1);
@@ -748,14 +748,14 @@ app.post('/api/consultores', authenticateToken, requireAdmin, async (req, res) =
     const senhaHash = await bcrypt.hash(senha, saltRounds);
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .insert([{ nome, telefone, email: emailNormalizado, senha: senhaHash, pix }])
       .select();
 
     if (error) throw error;
     res.json({ 
       id: data[0].id, 
-      message: 'Consultor cadastrado com sucesso!',
+      message: 'Corretor cadastrado com sucesso!',
       email: emailNormalizado
     });
   } catch (error) {
@@ -766,7 +766,7 @@ app.post('/api/consultores', authenticateToken, requireAdmin, async (req, res) =
 // === CADASTRO PÚBLICO DE CONSULTORES === (Sem autenticação)
 app.post('/api/consultores/cadastro', async (req, res) => {
   try {
-    console.log('📝 Cadastro de consultor recebido:', req.body);
+    console.log('📝 Cadastro de corretor recebido:', req.body);
     const { nome, telefone, email, senha, cpf, pix } = req.body;
     
     // Validar campos obrigatórios
@@ -785,7 +785,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     
     // Validar se email já existe
     const { data: emailExistente, error: emailError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('email', emailNormalizado)
       .limit(1);
@@ -798,7 +798,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     
     // Validar se CPF já existe
     const { data: cpfExistente, error: cpfError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('cpf', cpf)
       .limit(1);
@@ -816,7 +816,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     // Inserir consultor
     console.log('💾 Tentando inserir consultor no Supabase...');
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .insert([{ 
         nome, 
         telefone, 
@@ -830,15 +830,15 @@ app.post('/api/consultores/cadastro', async (req, res) => {
       .select();
 
     if (error) {
-      console.error('❌ Erro ao inserir consultor:', error);
+      console.error('❌ Erro ao inserir corretor:', error);
       throw error;
     }
     
-    console.log('✅ Consultor inserido com sucesso:', data[0]);
+    console.log('✅ Corretor inserido com sucesso:', data[0]);
     
     res.json({ 
       id: data[0].id, 
-      message: 'Consultor cadastrado com sucesso! Agora você pode fazer login.',
+      message: 'Corretor cadastrado com sucesso! Agora você pode fazer login.',
       email: emailNormalizado
     });
   } catch (error) {
@@ -881,7 +881,7 @@ app.post('/api/leads/cadastro', async (req, res) => {
     // Verificar se telefone já existe
     console.log('🔍 Verificando se telefone já existe:', telefoneNumeros);
     const { data: telefoneExistente, error: telefoneError } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .select('id, nome, created_at')
       .eq('telefone', telefoneNumeros)
       .limit(1);
@@ -909,7 +909,7 @@ app.post('/api/leads/cadastro', async (req, res) => {
     // Verificar se CPF já existe
     console.log('🔍 Verificando se CPF já existe:', cpfNumeros);
     const { data: cpfExistente, error: cpfError } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .select('id, nome, created_at')
       .eq('cpf', cpfNumeros)
       .limit(1);
@@ -939,12 +939,11 @@ app.post('/api/leads/cadastro', async (req, res) => {
     console.log('📍 Dados de localização:', { cidade, estado });
     
     const { data, error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .insert([{ 
         nome: nome.trim(), 
         telefone: telefoneNumeros, // Usar telefone normalizado (apenas números)
         cpf: cpfNumeros,
-        tipo_tratamento: tipo_tratamento || null,
         status: 'lead', 
         observacoes: observacoes || null,
         cidade: cidade ? cidade.trim() : null,
@@ -985,7 +984,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
       
       // Verificar se email já existe em outro consultor
       const { data: emailExistente, error: emailError } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('id')
         .eq('email', emailNormalizado)
         .neq('id', id)
@@ -994,7 +993,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
       if (emailError) throw emailError;
       
       if (emailExistente && emailExistente.length > 0) {
-        return res.status(400).json({ error: 'Este email já está sendo usado por outro consultor!' });
+        return res.status(400).json({ error: 'Este email já está sendo usado por outro corretor!' });
       }
       
       updateData.email = emailNormalizado;
@@ -1007,7 +1006,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
     }
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .update(updateData)
       .eq('id', id)
       .select();
@@ -1015,7 +1014,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
     if (error) throw error;
     res.json({ 
       id: data[0].id, 
-      message: 'Consultor atualizado com sucesso!',
+      message: 'Corretor atualizado com sucesso!',
       email: updateData.email
     });
   } catch (error) {
@@ -1029,7 +1028,7 @@ app.get('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
     const { id } = req.params;
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('*')
       .eq('id', id)
       .single();
@@ -1047,7 +1046,7 @@ app.get('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
 app.get('/api/pacientes', authenticateToken, async (req, res) => {
   try {
     let query = supabase
-      .from('pacientes')
+      .from('clientes')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -1056,18 +1055,18 @@ app.get('/api/pacientes', authenticateToken, async (req, res) => {
       // Buscar pacientes com agendamentos deste consultor
       const { data: agendamentos, error: agendError } = await supabase
         .from('agendamentos')
-        .select('paciente_id')
+        .select('cliente_id')
         .eq('consultor_id', req.user.consultor_id);
 
       if (agendError) throw agendError;
 
-      const pacienteIds = agendamentos.map(a => a.paciente_id);
+      const clienteIds = agendamentos.map(a => a.cliente_id);
       
       // Combinar: pacientes atribuídos diretamente OU com agendamentos
       const conditions = [`consultor_id.eq.${req.user.consultor_id}`];
       
-      if (pacienteIds.length > 0) {
-        conditions.push(`id.in.(${pacienteIds.join(',')})`);
+      if (clienteIds.length > 0) {
+        conditions.push(`id.in.(${clienteIds.join(',')})`);
       }
       
       // Aplicar filtro OR
@@ -1081,7 +1080,7 @@ app.get('/api/pacientes', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(paciente => ({
       ...paciente,
-      consultor_nome: paciente.consultores?.nome
+      consultor_nome: paciente.corretores?.nome
     }));
 
     res.json(formattedData);
@@ -1093,7 +1092,7 @@ app.get('/api/pacientes', authenticateToken, async (req, res) => {
 app.get('/api/dashboard/pacientes', authenticateToken, async (req, res) => {
   try {
     let query = supabase
-      .from('pacientes')
+      .from('clientes')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -1104,7 +1103,7 @@ app.get('/api/dashboard/pacientes', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(paciente => ({
       ...paciente,
-      consultor_nome: paciente.consultores?.nome
+      consultor_nome: paciente.corretores?.nome
     }));
 
     res.json(formattedData);
@@ -1124,7 +1123,7 @@ app.post('/api/pacientes', authenticateToken, async (req, res) => {
     // Verificar se telefone já existe
     if (telefoneNumeros) {
       const { data: telefoneExistente, error: telefoneError } = await supabase
-        .from('pacientes')
+        .from('clientes')
         .select('id, nome, created_at')
         .eq('telefone', telefoneNumeros)
         .limit(1);
@@ -1143,7 +1142,7 @@ app.post('/api/pacientes', authenticateToken, async (req, res) => {
     // Verificar se CPF já existe
     if (cpfNumeros) {
       const { data: cpfExistente, error: cpfError } = await supabase
-        .from('pacientes')
+        .from('clientes')
         .select('id, nome, created_at')
         .eq('cpf', cpfNumeros)
         .limit(1);
@@ -1164,7 +1163,7 @@ app.post('/api/pacientes', authenticateToken, async (req, res) => {
       (typeof consultor_id === 'number' ? consultor_id : parseInt(consultor_id)) : null;
     
     const { data, error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .insert([{ 
         nome, 
         telefone: telefoneNumeros, // Usar telefone normalizado
@@ -1179,7 +1178,7 @@ app.post('/api/pacientes', authenticateToken, async (req, res) => {
       .select();
 
     if (error) throw error;
-    res.json({ id: data[0].id, message: 'Paciente cadastrado com sucesso!' });
+    res.json({ id: data[0].id, message: 'Cliente cadastrado com sucesso!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1197,7 +1196,7 @@ app.put('/api/pacientes/:id', authenticateToken, async (req, res) => {
     // Verificar se telefone já existe em outro paciente
     if (telefoneNumeros) {
       const { data: telefoneExistente, error: telefoneError } = await supabase
-        .from('pacientes')
+        .from('clientes')
         .select('id, nome, created_at')
         .eq('telefone', telefoneNumeros)
         .neq('id', id) // Excluir o paciente atual
@@ -1217,7 +1216,7 @@ app.put('/api/pacientes/:id', authenticateToken, async (req, res) => {
     // Verificar se CPF já existe em outro paciente
     if (cpfNumeros) {
       const { data: cpfExistente, error: cpfError } = await supabase
-        .from('pacientes')
+        .from('clientes')
         .select('id, nome, created_at')
         .eq('cpf', cpfNumeros)
         .neq('id', id) // Excluir o paciente atual
@@ -1239,7 +1238,7 @@ app.put('/api/pacientes/:id', authenticateToken, async (req, res) => {
       (typeof consultor_id === 'number' ? consultor_id : parseInt(consultor_id)) : null;
     
     const { data, error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .update({ 
         nome, 
         telefone: telefoneNumeros, // Usar telefone normalizado
@@ -1255,7 +1254,7 @@ app.put('/api/pacientes/:id', authenticateToken, async (req, res) => {
       .select();
 
     if (error) throw error;
-    res.json({ id: data[0].id, message: 'Paciente atualizado com sucesso!' });
+    res.json({ id: data[0].id, message: 'Cliente atualizado com sucesso!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1268,19 +1267,19 @@ app.put('/api/pacientes/:id/status', authenticateToken, async (req, res) => {
     
     // Buscar dados do paciente primeiro
     const { data: paciente, error: pacienteError } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .select('*')
       .eq('id', id)
       .single();
 
     if (pacienteError) throw pacienteError;
     if (!paciente) {
-      return res.status(404).json({ error: 'Paciente não encontrado' });
+      return res.status(404).json({ error: 'Cliente não encontrado' });
     }
 
     // Atualizar status do paciente
     const { error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .update({ status })
       .eq('id', id);
 
@@ -1350,7 +1349,7 @@ app.delete('/api/pacientes/:id', authenticateToken, async (req, res) => {
     await supabase
       .from('agendamentos')
       .delete()
-      .eq('paciente_id', id);
+      .eq('cliente_id', id);
     
     // Excluir fechamentos relacionados
     await supabase
@@ -1360,13 +1359,13 @@ app.delete('/api/pacientes/:id', authenticateToken, async (req, res) => {
     
     // Excluir o paciente
     const { error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .delete()
       .eq('id', id);
       
     if (error) throw error;
 
-    res.json({ message: 'Paciente e registros relacionados excluídos com sucesso!' });
+    res.json({ message: 'Cliente e registros relacionados excluídos com sucesso!' });
   } catch (error) {
     console.error('Erro ao excluir paciente:', error);
     res.status(500).json({ error: error.message });
@@ -1377,7 +1376,7 @@ app.delete('/api/pacientes/:id', authenticateToken, async (req, res) => {
 app.get('/api/novos-leads', authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .select('*')
       .is('consultor_id', null)
       .order('created_at', { ascending: false });
@@ -1395,7 +1394,7 @@ app.put('/api/novos-leads/:id/pegar', authenticateToken, async (req, res) => {
     
     // Verificar se o lead ainda está disponível
     const { data: pacienteAtual, error: checkError } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .select('consultor_id')
       .eq('id', id)
       .single();
@@ -1403,12 +1402,12 @@ app.put('/api/novos-leads/:id/pegar', authenticateToken, async (req, res) => {
     if (checkError) throw checkError;
 
     if (pacienteAtual.consultor_id !== null) {
-      return res.status(400).json({ error: 'Este lead já foi atribuído a outro consultor!' });
+      return res.status(400).json({ error: 'Este lead já foi atribuído a outro corretor!' });
     }
 
     // Atribuir o lead ao consultor atual
     const { error } = await supabase
-      .from('pacientes')
+      .from('clientes')
       .update({ consultor_id: req.user.consultor_id })
       .eq('id', id);
 
@@ -1423,7 +1422,7 @@ app.put('/api/novos-leads/:id/pegar', authenticateToken, async (req, res) => {
 app.get('/api/novas-clinicas', authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('novas_clinicas')
+      .from('imobiliarias')
       .select('*')
       .is('consultor_id', null)
       .order('created_at', { ascending: false });
@@ -1445,7 +1444,7 @@ app.post('/api/novas-clinicas', authenticateToken, async (req, res) => {
     // Verificar se telefone já existe
     if (telefoneNumeros) {
       const { data: telefoneExistente, error: telefoneError } = await supabase
-        .from('novas_clinicas')
+        .from('imobiliarias')
         .select('id, nome, created_at')
         .eq('telefone', telefoneNumeros)
         .limit(1);
@@ -1483,7 +1482,7 @@ app.post('/api/novas-clinicas', authenticateToken, async (req, res) => {
     }
     
     const { data, error } = await supabase
-      .from('novas_clinicas')
+      .from('imobiliarias')
       .insert([{ 
         nome, 
         endereco,
@@ -1501,7 +1500,7 @@ app.post('/api/novas-clinicas', authenticateToken, async (req, res) => {
       .select();
 
     if (error) throw error;
-    res.json({ id: data[0].id, message: 'Nova clínica cadastrada com sucesso!' });
+    res.json({ id: data[0].id, message: 'Novo Empreendimento cadastrado com sucesso!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1513,7 +1512,7 @@ app.put('/api/novas-clinicas/:id/pegar', authenticateToken, async (req, res) => 
     
     // Verificar se a clínica ainda está disponível
     const { data: clinicaAtual, error: checkError } = await supabase
-      .from('novas_clinicas')
+      .from('imobiliarias')
       .select('consultor_id')
       .eq('id', id)
       .single();
@@ -1521,17 +1520,17 @@ app.put('/api/novas-clinicas/:id/pegar', authenticateToken, async (req, res) => 
     if (checkError) throw checkError;
 
     if (clinicaAtual.consultor_id !== null) {
-      return res.status(400).json({ error: 'Esta clínica já foi atribuída a outro consultor!' });
+      return res.status(400).json({ error: 'Esse Empreendimento já foi atribuída a outro corretor!' });
     }
 
     // Atribuir a clínica ao consultor atual
     const { error } = await supabase
-      .from('novas_clinicas')
+      .from('imobiliarias')
       .update({ consultor_id: req.user.consultor_id })
       .eq('id', id);
 
     if (error) throw error;
-    res.json({ message: 'Clínica atribuída com sucesso!' });
+    res.json({ message: 'Empreendimento atribuída com sucesso!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1557,10 +1556,10 @@ app.get('/api/agendamentos', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(agendamento => ({
       ...agendamento,
-      paciente_nome: agendamento.pacientes?.nome,
-      paciente_telefone: agendamento.pacientes?.telefone,
-      consultor_nome: agendamento.consultores?.nome,
-      clinica_nome: agendamento.clinicas?.nome
+      paciente_nome: agendamento.clientes?.nome,
+      paciente_telefone: agendamento.clientes?.telefone,
+      consultor_nome: agendamento.corretores?.nome,
+      clinica_nome: agendamento.imobiliarias?.nome
     }));
 
     res.json(formattedData);
@@ -1584,10 +1583,11 @@ app.get('/api/dashboard/agendamentos', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(agendamento => ({
       ...agendamento,
-      paciente_nome: agendamento.pacientes?.nome,
-      paciente_telefone: agendamento.pacientes?.telefone,
-      consultor_nome: agendamento.consultores?.nome,
-      clinica_nome: agendamento.clinicas?.nome
+      paciente_id: agendamento.cliente_id,
+      paciente_nome: agendamento.clientes?.nome,
+      paciente_telefone: agendamento.clientes?.telefone,
+      consultor_nome: agendamento.corretores?.nome,
+      clinica_nome: agendamento.imobiliarias?.nome
     }));
 
     res.json(formattedData);
@@ -1598,12 +1598,12 @@ app.get('/api/dashboard/agendamentos', authenticateToken, async (req, res) => {
 
 app.post('/api/agendamentos', authenticateToken, async (req, res) => {
   try {
-    const { paciente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes } = req.body;
+    const { cliente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes } = req.body;
     
     // Primeiro, tenta inserir normalmente
     let { data, error } = await supabase
       .from('agendamentos')
-      .insert([{ paciente_id, consultor_id, clinica_id, data_agendamento, horario, status: status || 'agendado', observacoes }])
+      .insert([{ cliente_id, consultor_id, clinica_id, data_agendamento, horario, status: status || 'agendado', observacoes }])
       .select();
 
     // Se der erro de chave duplicada, tenta corrigir a sequência
@@ -1616,7 +1616,7 @@ app.post('/api/agendamentos', authenticateToken, async (req, res) => {
       // Tentar inserir novamente
       const retryResult = await supabase
         .from('agendamentos')
-        .insert([{ paciente_id, consultor_id, clinica_id, data_agendamento, horario, status: status || 'agendado', observacoes }])
+        .insert([{ cliente_id, consultor_id, clinica_id, data_agendamento, horario, status: status || 'agendado', observacoes }])
         .select();
       
       data = retryResult.data;
@@ -1628,7 +1628,7 @@ app.post('/api/agendamentos', authenticateToken, async (req, res) => {
     // Atualizar status do paciente para "agendado"
     if (paciente_id) {
       await supabase
-        .from('pacientes')
+        .from('clientes')
         .update({ status: 'agendado' })
         .eq('id', paciente_id);
     }
@@ -1643,11 +1643,11 @@ app.post('/api/agendamentos', authenticateToken, async (req, res) => {
 app.put('/api/agendamentos/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { paciente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes } = req.body;
+    const { cliente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes } = req.body;
     
     const { data, error } = await supabase
       .from('agendamentos')
-      .update({ paciente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes })
+      .update({ cliente_id, consultor_id, clinica_id, data_agendamento, horario, status, observacoes })
       .eq('id', id)
       .select();
 
@@ -1656,7 +1656,7 @@ app.put('/api/agendamentos/:id', authenticateToken, async (req, res) => {
     // Se mudou o paciente do agendamento, atualizar status do novo paciente
     if (paciente_id) {
       await supabase
-        .from('pacientes')
+        .from('clientes')
         .update({ status: 'agendado' })
         .eq('id', paciente_id);
     }
@@ -1697,9 +1697,9 @@ app.put('/api/agendamentos/:id/status', authenticateToken, async (req, res) => {
     if (status === 'fechado') {
       // Apenas atualizar status do paciente para "fechado"
       await supabase
-        .from('pacientes')
+        .from('clientes')
         .update({ status: 'fechado' })
-        .eq('id', agendamento.paciente_id);
+        .eq('id', agendamento.cliente_id);
     }
 
     res.json({ message: 'Status atualizado com sucesso!' });
@@ -1718,7 +1718,7 @@ app.put('/api/agendamentos/:id/lembrado', authenticateToken, async (req, res) =>
       .eq('id', id);
 
     if (error) throw error;
-    res.json({ message: 'Paciente marcado como lembrado!' });
+    res.json({ message: 'Cliente marcado como lembrado!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1762,11 +1762,11 @@ app.get('/api/fechamentos', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(fechamento => ({
       ...fechamento,
-      paciente_nome: fechamento.pacientes?.nome,
-      paciente_telefone: fechamento.pacientes?.telefone,
-      paciente_cpf: fechamento.pacientes?.cpf,
-      consultor_nome: fechamento.consultores?.nome,
-      clinica_nome: fechamento.clinicas?.nome
+      paciente_nome: fechamento.clientes?.nome,
+      paciente_telefone: fechamento.clientes?.telefone,
+      paciente_cpf: fechamento.clientes?.cpf,
+      consultor_nome: fechamento.corretores?.nome,
+      clinica_nome: fechamento.imobiliarias?.nome
     }));
 
     res.json(formattedData);
@@ -1791,11 +1791,11 @@ app.get('/api/dashboard/fechamentos', authenticateToken, async (req, res) => {
     // Reformatar dados para compatibilidade com frontend
     const formattedData = data.map(fechamento => ({
       ...fechamento,
-      paciente_nome: fechamento.pacientes?.nome,
-      paciente_telefone: fechamento.pacientes?.telefone,
-      paciente_cpf: fechamento.pacientes?.cpf,
-      consultor_nome: fechamento.consultores?.nome,
-      clinica_nome: fechamento.clinicas?.nome
+      paciente_nome: fechamento.clientes?.nome,
+      paciente_telefone: fechamento.clientes?.telefone,
+      paciente_cpf: fechamento.clientes?.cpf,
+      consultor_nome: fechamento.corretores?.nome,
+      clinica_nome: fechamento.imobiliarias?.nome
     }));
 
     res.json(formattedData);
@@ -1887,7 +1887,7 @@ app.post('/api/fechamentos', authenticateUpload, upload.single('contrato'), asyn
     // Atualizar status do paciente para "fechado"
     if (paciente_id) {
       await supabaseAdmin
-        .from('pacientes')
+        .from('clientes')
         .update({ status: 'fechado' })
         .eq('id', paciente_id);
     }
@@ -2216,7 +2216,7 @@ app.get('/api/meta-ads/leads', authenticateToken, async (req, res) => {
     // Se for consultor, filtrar apenas leads de pacientes atribuídos a ele
     if (req.user.tipo === 'consultor') {
       const { data: pacientesConsultor, error: pacientesError } = await supabase
-        .from('pacientes')
+        .from('clientes')
         .select('id')
         .eq('consultor_id', req.user.consultor_id);
 
@@ -2534,22 +2534,22 @@ app.get('/api/dashboard', authenticateToken, async (req, res) => {
 
     // Buscar total de pacientes
     let pacientesQuery = supabase
-      .from('pacientes')
+      .from('clientes')
       .select('*', { count: 'exact', head: true });
 
     // Para consultor, contar apenas pacientes com agendamentos dele
     if (isConsultor) {
       const { data: agendamentos, error: agendError } = await supabase
         .from('agendamentos')
-        .select('paciente_id')
+        .select('cliente_id')
         .eq('consultor_id', consultorId);
 
       if (agendError) throw agendError;
 
-      const pacienteIds = [...new Set(agendamentos.map(a => a.paciente_id))];
+      const clienteIds = [...new Set(agendamentos.map(a => a.cliente_id))];
       
-      if (pacienteIds.length > 0) {
-        pacientesQuery = pacientesQuery.in('id', pacienteIds);
+      if (clienteIds.length > 0) {
+        pacientesQuery = pacientesQuery.in('id', clienteIds);
       } else {
         pacientesQuery = pacientesQuery.eq('id', 0); // Força resultado vazio
       }
@@ -2585,7 +2585,7 @@ app.get('/api/dashboard', authenticateToken, async (req, res) => {
 
     // Buscar consultores
     let consultoresQuery = supabase
-      .from('consultores')
+      .from('corretores')
       .select('id, nome');
 
     // Se for consultor, buscar apenas dados dele
@@ -2700,7 +2700,7 @@ server.listen(PORT, async () => {
   
   // Verificar conexão com Supabase
   try {
-    const { data, error } = await supabase.from('clinicas').select('count').limit(1);
+    const { data, error } = await supabase.from('imobiliarias').select('count').limit(1);
     if (error) {
       console.log('⚠️  Configure as variáveis SUPABASE_URL e SUPABASE_SERVICE_KEY no arquivo .env');
       console.log('📖 Consulte o README.md para instruções detalhadas');
@@ -2915,7 +2915,7 @@ app.get('/api/meta-ads/advanced-metrics', authenticateToken, requireAdmin, async
     // Agrupar fechamentos por cidade para calcular CPA real por região
     if (fechamentosAprovados && fechamentosAprovados.length > 0) {
       fechamentosAprovados.forEach(fechamento => {
-        const cidade = fechamento.pacientes?.cidade || 'N/A';
+        const cidade = fechamento.clientes?.cidade || 'N/A';
         if (!fechamentosPorCidade[cidade]) {
           fechamentosPorCidade[cidade] = {
             count: 0,

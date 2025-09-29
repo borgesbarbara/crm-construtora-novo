@@ -12,7 +12,7 @@ async function testConnection() {
     // Testar se tabela consultores existe
     console.log('\n🧪 Testando tabela consultores...');
     const { data: consultores, error: errorConsultores } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id, nome')
       .limit(1);
     

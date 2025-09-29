@@ -237,7 +237,7 @@ function AppContent() {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              Pacientes
+              Clientes
             </Link>
           </div>
 
@@ -281,7 +281,7 @@ function AppContent() {
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                 <polyline points="9 22 9 12 15 12 15 22" />
               </svg>
-              Clínicas
+              Empreendimentos
             </Link>
           </div>
 
@@ -296,7 +296,7 @@ function AppContent() {
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                Consultores
+                Corretores
               </Link>
             </div>
           )}
@@ -325,7 +325,7 @@ function AppContent() {
             </div>
             <div className="user-details">
               <h3>{user.nome}</h3>
-              <p>{user.tipo === 'admin' ? 'Administrador' : 'Consultor'}</p>
+              <p>{user.tipo === 'admin' ? 'Administrador' : 'Corretor'}</p>
             </div>
           </div>
           <Link
@@ -396,7 +396,7 @@ function AppContent() {
               src={logoHorizontalPreto} 
               alt="CRM System" 
               style={{ 
-                height: '90px', 
+                height: '70px', // altera tamanho da logo no cabeçalho
                 objectFit: 'contain'
               }} 
             />
@@ -446,7 +446,7 @@ function AppContent() {
                   {user.nome}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                  {user.tipo === 'admin' ? 'Administrador' : 'Consultor'}
+                  {user.tipo === 'admin' ? 'Administrador' : 'Corretor'}
                 </div>
               </div>
               <svg 

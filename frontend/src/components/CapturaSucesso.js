@@ -8,7 +8,7 @@ const CapturaSucesso = () => {
   const { nome, message } = location.state || {};
 
   const handleWhatsApp = () => {
-    const phoneNumber = '5541997233138'; // Número do WhatsApp da clínica
+    const phoneNumber = '554130739709'; // Número do WhatsApp da clínica
     const text = `Olá! Acabei de me cadastrar no site para agendar uma consulta. Meu nome é ${nome || 'Não informado'}.`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
@@ -36,8 +36,7 @@ const CapturaSucesso = () => {
             Obrigado{nome ? `, ${nome.split(' ')[0]}` : ''}!
           </h2>
           <p className="card-text">
-            Sua solicitação foi enviada com sucesso. Nossa equipe entrará em contato 
-            em até <strong>2 horas</strong> para agendar sua consulta gratuita.
+            Sua solicitação foi enviada com sucesso. Nossa equipe entrará em contato em breve.
           </p>
           
           <div className="next-steps">
@@ -53,15 +52,8 @@ const CapturaSucesso = () => {
               <div className="step-item">
                 <div className="step-number">2</div>
                 <div className="step-content">
-                  <strong>Agende sua consulta</strong>
+                  <strong>Agende seu atendimento</strong>
                   <p>Escolha o melhor horário para você</p>
-                </div>
-              </div>
-              <div className="step-item">
-                <div className="step-number">3</div>
-                <div className="step-content">
-                  <strong>Realize sua consulta</strong>
-                  <p>Avaliação gratuita com nossos especialistas</p>
                 </div>
               </div>
             </div>
@@ -83,50 +75,13 @@ const CapturaSucesso = () => {
             </button>
           </div>
         </div>
-
-        <div className="additional-info">
-          <div className="info-cards">
-            <div className="info-card">
-              <div className="info-icon">🕐</div>
-              <h4>Resposta Rápida</h4>
-              <p>Respondemos em até 2 horas</p>
-            </div>
-            <div className="info-card">
-              <div className="info-icon">🆓</div>
-              <h4>Consulta Gratuita</h4>
-              <p>Primeira consulta sem custo</p>
-            </div>
-            <div className="info-card">
-              <div className="info-icon">⭐</div>
-              <h4>Atendimento Premium</h4>
-              <p>Profissionais qualificados</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="social-proof">
-          <h3 className="social-title">Junte-se a milhares de pacientes satisfeitos</h3>
-          <div className="social-stats">
-            <div className="stat-item">
-              <div className="stat-number">1000+</div>
-              <div className="stat-label">Sorrisos Transformados</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">5⭐</div>
-              <div className="stat-label">Avaliação Média</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Satisfação</div>
-            </div>
-          </div>
-        </div>
+        
       </div>
 
       <style jsx>{`
         .sucesso-container {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg,rgb(3, 21, 104) 0%,rgb(9, 23, 153) 100%);
           padding: 20px;
           display: flex;
           align-items: center;
@@ -238,7 +193,7 @@ const CapturaSucesso = () => {
         }
 
         .step-number {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg,rgb(6, 24, 101) 0%,rgb(18, 12, 103) 100%);
           color: white;
           width: 30px;
           height: 30px;
@@ -292,10 +247,10 @@ const CapturaSucesso = () => {
           box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
         }
 
-        .secondary-btn {
+        .secondary-btn { 
           background: transparent;
-          color: #667eea;
-          border: 2px solid #667eea;
+          color:rgb(7, 22, 91);
+          border: 2px solidrgb(7, 27, 118);
           padding: 15px 25px;
           border-radius: 12px;
           font-size: 1rem;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoBrasaoPreto from '../images/logobrasaopreto.png';
+import config from '../config';
 
 const CadastroConsultor = () => {
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ const CadastroConsultor = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('/api/consultores/cadastro', {
+      const response = await fetch(`${config.API_BASE_URL}/consultores/cadastro`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -230,7 +231,7 @@ const CadastroConsultor = () => {
             marginBottom: '0.75rem',
             letterSpacing: '-0.025em'
           }}>
-            Cadastro de Consultor
+            Cadastro de Corretor
           </h1>
           <p style={{
             fontSize: '1rem',

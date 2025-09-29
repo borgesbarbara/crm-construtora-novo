@@ -933,8 +933,8 @@ const Pacientes = () => {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Gestão de Pacientes</h1>
-        <p className="page-subtitle">Cadastre e acompanhe seus pacientes e leads</p>
+        <h1 className="page-title">Gestão de Clientes</h1>
+        <p className="page-subtitle">Cadastre e acompanhe seus clientes e leads</p>
 
         <div style={{
           backgroundColor: '#f0f9ff',
@@ -961,7 +961,7 @@ const Pacientes = () => {
           className={`tab ${activeTab === 'pacientes' ? 'active' : ''}`}
           onClick={() => setActiveTab('pacientes')}
         >
-          Pacientes
+          Clientes
         </button>
         <button
           className={`tab ${activeTab === 'novos-leads' ? 'active' : ''}`}
@@ -1054,7 +1054,7 @@ const Pacientes = () => {
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">Consultor</label>
+                    <label className="form-label">Corretor</label>
                     <select className="form-select" value={filtroConsultor} onChange={e => setFiltroConsultor(e.target.value)}>
                       <option value="">Todos</option>
                       {consultores.map(c => (
@@ -1099,13 +1099,13 @@ const Pacientes = () => {
 
           <div className="card">
             <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 className="card-title">Lista de Pacientes</h2>
+              <h2 className="card-title">Lista de Clientes</h2>
               <button className="btn btn-primary" onClick={() => setShowModal(true)}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
-                Novo Paciente
+                Novo Cliente
               </button>
             </div>
 
@@ -1115,7 +1115,7 @@ const Pacientes = () => {
               </div>
             ) : pacientesFiltrados.length === 0 ? (
               <div style={{ textAlign: 'center', color: '#6b7280', padding: '3rem' }}>
-                Nenhum paciente cadastrado ainda.
+                Nenhum cliente cadastrado ainda.
               </div>
             ) : (
               <>
@@ -1568,7 +1568,7 @@ const Pacientes = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Consultor Responsável</label>
+                <label className="form-label">Corretor Responsável</label>
                 <select
                   name="consultor_id"
                   className="form-select"
@@ -1649,7 +1649,7 @@ const Pacientes = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">Consultor Responsável</label>
+                <label className="form-label">Corretor Responsável</label>
                 <input type="text" className="form-input" value={consultores.find(c => String(c.id) === String(viewPaciente.consultor_id))?.nome || '-'} readOnly />
               </div>
               <div className="form-group">

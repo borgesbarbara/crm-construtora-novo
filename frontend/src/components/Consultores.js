@@ -259,13 +259,13 @@ const Consultores = () => {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Gerenciar Consultores</h1>
-        <p className="page-subtitle">Gerencie a equipe de consultores</p>
+        <h1 className="page-title">Gerenciar Corretores</h1>
+        <p className="page-subtitle">Gerencie a equipe de corretores</p>
       </div>
 
       <div className="card">
         <div className="card-header">
-          <h2 className="card-title">Equipe de Consultores</h2>
+          <h2 className="card-title">Equipe de Corretores</h2>
           <button 
             className="btn btn-primary"
             onClick={() => setShowModal(true)}
@@ -273,7 +273,7 @@ const Consultores = () => {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 5v14M5 12h14" />
             </svg>
-            Novo Consultor
+            Novo Corretor
           </button>
         </div>
 
@@ -283,7 +283,7 @@ const Consultores = () => {
           </div>
         ) : consultores.length === 0 ? (
           <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>
-            Nenhum consultor cadastrado ainda.
+            Nenhum corretor cadastrado ainda.
           </p>
         ) : (
           <div className="table-container">
@@ -406,7 +406,7 @@ const Consultores = () => {
           <div className="modal" style={{ maxWidth: '600px' }}>
             <div className="modal-header">
               <h2 className="modal-title">
-                Detalhes do Consultor
+                Detalhes do Corretor
               </h2>
               <button 
                 className="close-btn"
@@ -496,7 +496,7 @@ const Consultores = () => {
           <div className="modal">
             <div className="modal-header">
               <h2 className="modal-title">
-                {editingConsultor ? 'Editar Consultor' : 'Novo Consultor'}
+                {editingConsultor ? 'Editar Corretor' : 'Novo Corretor'}
               </h2>
               <button 
                 className="close-btn"
@@ -595,7 +595,7 @@ const Consultores = () => {
                   type="submit"
                   className="btn btn-primary"
                 >
-                  {editingConsultor ? 'Atualizar Consultor' : 'Cadastrar Consultor'}
+                  {editingConsultor ? 'Atualizar Corretor' : 'Cadastrar Corretor'}
                 </button>
               </div>
             </form>

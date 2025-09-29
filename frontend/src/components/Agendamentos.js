@@ -134,10 +134,10 @@ const Agendamentos = () => {
       if (response.ok) {
         setPacientes(data);
       } else {
-        console.error('Erro ao carregar pacientes:', data.error);
+        console.error('Erro ao carregar clientes:', data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar pacientes:', error);
+      console.error('Erro ao carregar clientes:', error);
     }
   };
 
@@ -149,10 +149,10 @@ const Agendamentos = () => {
       if (response.ok) {
         setConsultores(data);
       } else {
-        console.error('Erro ao carregar consultores:', data.error);
+        console.error('Erro ao carregar corretores:', data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar consultores:', error);
+      console.error('Erro ao carregar corretores:', error);
     }
   };
 
@@ -164,10 +164,10 @@ const Agendamentos = () => {
       if (response.ok) {
         setClinicas(data);
       } else {
-        console.error('Erro ao carregar clínicas:', data.error);
+        console.error('Erro ao carregar empreendimentos:', data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar clínicas:', error);
+      console.error('Erro ao carregar empreendimentos:', error);
     }
   };
 
@@ -530,7 +530,7 @@ const Agendamentos = () => {
     <div>
       <div className="page-header">
         <h1 className="page-title">Gerenciar Agendamentos</h1>
-        <p className="page-subtitle">Gerencie consultas e acompanhe o pipeline de vendas</p>
+        <p className="page-subtitle">Gerencie agendamentos e acompanhe o pipeline de vendas</p>
         
         {/* Aviso sobre automação do pipeline */}
         <div style={{
@@ -594,7 +594,7 @@ const Agendamentos = () => {
           <div style={{ padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
             <div className="grid grid-2" style={{ gap: '1rem', marginBottom: '1rem' }}>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Consultor</label>
+                <label className="form-label">Corretor</label>
                 <select
                   value={filtroConsultor}
                   onChange={(e) => setFiltroConsultor(e.target.value)}
@@ -610,13 +610,13 @@ const Agendamentos = () => {
               </div>
 
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Clínica</label>
+                <label className="form-label">Empreendimentos</label>
                 <select
                   value={filtroClinica}
                   onChange={(e) => setFiltroClinica(e.target.value)}
                   className="form-select"
                 >
-                  <option value="">Todas as clínicas</option>
+                  <option value="">Todos os Empreendimentos</option>
                   {clinicas.map(clinica => (
                     <option key={clinica.id} value={clinica.id}>
                       {clinica.nome}
@@ -697,9 +697,9 @@ const Agendamentos = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Paciente</th>
-                  <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Consultor</th>
-                  <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Clínica</th>
+                  <th>Cliente</th>
+                  <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Corretor</th>
+                  <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Empreendimento</th>
                   <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Data</th>
                   <th style={{ display: window.innerWidth <= 768 ? 'none' : 'table-cell' }}>Horário</th>
                   <th>Status</th>
@@ -842,7 +842,7 @@ const Agendamentos = () => {
 
             <form onSubmit={handleSubmit} autoComplete="off">
               <div className="form-group">
-                <label className="form-label">Paciente *</label>
+                <label className="form-label">Cliente *</label>
                 <select
                   name="paciente_id"
                   className="form-select"
@@ -850,7 +850,7 @@ const Agendamentos = () => {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="">Selecione um paciente</option>
+                  <option value="">Selecione um cliente</option>
                   {pacientes.filter(paciente => 
                     // Mostrar apenas pacientes com status apropriados para agendamento
                     ['lead', 'em_conversa', 'cpf_aprovado', 'sem_cedente', 'agendado', 'compareceu', 'nao_compareceu', 'reagendado'].includes(paciente.status)
@@ -862,14 +862,14 @@ const Agendamentos = () => {
                 </select>
                 {pacientes.length === 0 && (
                   <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                    Nenhum paciente cadastrado. Cadastre um paciente primeiro.
+                    Nenhum cliente cadastrado. Cadastre um cliente primeiro.
                   </p>
                 )}
               </div>
 
               <div className="grid grid-2">
                 <div className="form-group">
-                  <label className="form-label">Consultor *</label>
+                  <label className="form-label">Corretor *</label>
                   <select
                     name="consultor_id"
                     className="form-select"
@@ -877,7 +877,7 @@ const Agendamentos = () => {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Selecione um consultor</option>
+                    <option value="">Selecione um corretor</option>
                     {consultores.map(consultor => (
                       <option key={consultor.id} value={consultor.id}>
                         {consultor.nome}
@@ -887,14 +887,14 @@ const Agendamentos = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Clínica</label>
+                  <label className="form-label">Empreendimento</label>
                   <select
                     name="clinica_id"
                     className="form-select"
                     value={formData.clinica_id}
                     onChange={handleInputChange}
                   >
-                    <option value="">Selecione uma clínica</option>
+                    <option value="">Selecione um empreendimento</option>
                     {clinicas.map(clinica => (
                       <option key={clinica.id} value={clinica.id}>
                         {clinica.nome}
@@ -990,7 +990,7 @@ const Agendamentos = () => {
             </div>
             <div style={{ padding: '1.5rem' }}>
               <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                <label className="form-label">Telefone do paciente</label>
+                <label className="form-label">Telefone do cliente</label>
                 <div style={{
                   backgroundColor: '#f9fafb',
                   border: '1px solid #e5e7eb',
@@ -1053,7 +1053,7 @@ const Agendamentos = () => {
                   marginBottom: '1rem',
                   lineHeight: '1.5'
                 }}>
-                  <strong>Paciente:</strong> {agendamentoParaFechar?.paciente_nome}
+                  <strong>Cliente:</strong> {agendamentoParaFechar?.paciente_nome}
                 </p>
                 <p style={{ 
                   color: '#6b7280', 
@@ -1089,18 +1089,6 @@ const Agendamentos = () => {
                 </div>
               </div>
 
-              <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label className="form-label">Tipo de Tratamento</label>
-                <select 
-                  className="form-select"
-                  value={tipoTratamentoFechamento}
-                  onChange={(e) => setTipoTratamentoFechamento(e.target.value)}
-                >
-                  <option value="">Selecione</option>
-                  <option value="Estético">Estético</option>
-                  <option value="Odontológico">Odontológico</option>
-                </select>
-              </div>
 
               <div className="form-group" style={{ marginBottom: '1rem' }}>
                 <label className="form-label">Contrato (PDF) *</label>

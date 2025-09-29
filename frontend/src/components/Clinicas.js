@@ -642,8 +642,8 @@ const Clinicas = () => {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">{isConsultor ? 'Visualizar Clínicas' : 'Gerenciar Clínicas'}</h1>
-        <p className="page-subtitle">{isConsultor ? 'Visualize as clínicas parceiras' : 'Gerencie as clínicas parceiras'}</p>
+        <h1 className="page-title">{isConsultor ? 'Visualizar Empreendimentos' : 'Gerenciar Empreendimentos'}</h1>
+        <p className="page-subtitle">{isConsultor ? 'Visualize os empreendimentos parceiros' : 'Gerencie os empreendimentos parceiros'}</p>
       </div>
 
       {/* Navegação por abas */}
@@ -652,14 +652,14 @@ const Clinicas = () => {
           className={`tab ${activeTab === 'clinicas' ? 'active' : ''}`}
           onClick={() => setActiveTab('clinicas')}
         >
-          Clínicas
+          Empreendimentos
         </button>
         <button
           className={`tab ${activeTab === 'novas-clinicas' ? 'active' : ''}`}
           onClick={() => setActiveTab('novas-clinicas')}
           style={{ position: 'relative' }}
         >
-          Novas Clínicas
+          Novos Empreendimentos
           {novasClinicas.length > 0 && (
             <span className="tab-badge">{novasClinicas.length}</span>
           )}
@@ -696,7 +696,7 @@ const Clinicas = () => {
                   color: 'white',
                   textShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
-                  🗺️ Mapa de Clínicas
+                  🗺️ Mapa de Empreendimentos
                 </h2>
                 <p style={{ 
                   fontSize: '0.95rem', 
@@ -704,7 +704,7 @@ const Clinicas = () => {
                   marginTop: '0.5rem',
                   margin: '0.5rem 0 0 0'
                 }}>
-                  Visualização geográfica de todas as clínicas parceiras e prospects
+                  Visualização geográfica de todos os empreendimentos parceiros e prospects
                 </p>
               </div>
               
@@ -727,7 +727,7 @@ const Clinicas = () => {
                     opacity: 0.9,
                     marginTop: '0.25rem'
                   }}>
-                    Clínicas Parceiras
+                    Empreendimentos Parceiros
                   </div>
                 </div>
                 <div style={{ 
@@ -748,7 +748,7 @@ const Clinicas = () => {
                     opacity: 0.9,
                     marginTop: '0.25rem'
                   }}>
-                    Novas Clínicas
+                    Novos Empreendimentos
                   </div>
                 </div>
               </div>
@@ -786,7 +786,7 @@ const Clinicas = () => {
                   fontWeight: '600',
                   color: '#1f2937'
                 }}>
-                  Clínicas Parceiras
+                  Empreendimentos Parceiros
                 </span>
               </div>
               
@@ -811,7 +811,7 @@ const Clinicas = () => {
                   fontWeight: '600',
                   color: '#1f2937'
                 }}>
-                  Novas Clínicas (Prospects)
+                  Novos Empreendimentos (Prospects)
                 </span>
               </div>
             </div>
@@ -1045,11 +1045,11 @@ const Clinicas = () => {
           </div>
         </div>
       )}
-      {/* Conteúdo da aba Clínicas */}
+      {/* Conteúdo da aba Empreendimentos */}
       {activeTab === 'clinicas' && (
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">Lista de Clínicas</h2>
+            <h2 className="card-title">Lista de Empreendimentos</h2>
             {!isConsultor && (
               <button 
                 className="btn btn-primary"
@@ -1058,7 +1058,7 @@ const Clinicas = () => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
-                Nova Clínica
+                Novo Empreendimento
               </button>
             )}
           </div>
@@ -1293,11 +1293,11 @@ const Clinicas = () => {
         </div>
       )}
 
-      {/* Conteúdo da aba Novas Clínicas */}
+      {/* Conteúdo da aba Novos Empreendimentos */}
       {activeTab === 'novas-clinicas' && (
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">Novas Clínicas Encontradas</h2>
+            <h2 className="card-title">Novos Empreendimentos Encontrados</h2>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                 {novasClinicas.length} clínica(s) disponível(eis)
@@ -1309,7 +1309,7 @@ const Clinicas = () => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
-                Cadastrar Nova Clínica
+                Cadastrar Novo Empreendimento
               </button>
             </div>
           </div>
@@ -1636,9 +1636,9 @@ const Clinicas = () => {
          <div className="modal-overlay">
            <div className="modal" style={{ maxWidth: '600px' }}>
              <div className="modal-header">
-               <h2 className="modal-title">
-                 Detalhes da Clínica
-               </h2>
+              <h2 className="modal-title">
+                Detalhes do Empreendimento
+              </h2>
                <button 
                  className="close-btn"
                  onClick={closeViewModal}
@@ -1740,7 +1740,7 @@ const Clinicas = () => {
           <div className="modal" style={{ maxWidth: '600px' }}>
             <div className="modal-header">
               <h2 className="modal-title">
-                Detalhes da Nova Clínica
+                Detalhes do Novo Empreendimento
               </h2>
               <button 
                 className="close-btn"
@@ -1861,7 +1861,7 @@ const Clinicas = () => {
         <div className="modal-overlay">
           <div className="modal" style={{ maxWidth: '700px' }}>
             <div className="modal-header">
-              <h2 className="modal-title">Cadastrar Nova Clínica</h2>
+              <h2 className="modal-title">Cadastrar Novo Empreendimento</h2>
               <button 
                 className="close-btn"
                 onClick={() => {

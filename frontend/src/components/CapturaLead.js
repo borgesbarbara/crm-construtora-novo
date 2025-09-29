@@ -8,7 +8,6 @@ const CapturaLead = () => {
   const [formData, setFormData] = useState({
     nome: '',
     telefone: '',
-    tipo_tratamento: '',
     cpf: '',
     cidade: '',
     estado: '',
@@ -262,34 +261,19 @@ const CapturaLead = () => {
           <div className="captura-header">
             <img src={logoBrasao} alt="Logo" className="captura-logo" />
             <h1 className="captura-title">
-              Transforme seu <span className="highlight">Sorriso</span>
+            Conquiste o Empreendimento dos <span className="highlight">Seus Sonhos!</span>
             </h1>
             <p className="captura-subtitle">
-              Agende sua consulta gratuita e descubra como podemos te ajudar a conquistar o sorriso dos seus sonhos
+            Agende seu atendimento gratuito e descubra como podemos ajudar a realizar o sonho da casa própria com empreendimentos de alto padrão, qualidade e localização privilegiada.
             </p>
           </div>
 
-          {/* Benefícios */}
-          <div className="captura-benefits">
-            <div className="benefit-item">
-              <div className="benefit-icon">✨</div>
-              <span>Consulta Gratuita</span>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">🏆</div>
-              <span>Profissionais Qualificados</span>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">💎</div>
-              <span>Tecnologia Avançada</span>
-            </div>
-          </div>
 
           {/* Formulário */}
           <div className="captura-form-container">
             <h2 className="form-title">Preencha seus dados</h2>
             <p className="form-subtitle">
-              Entraremos em contato em até 2 horas para agendar sua consulta
+          
             </p>
 
             {errors.general && (
@@ -327,21 +311,7 @@ const CapturaLead = () => {
                 {errors.telefone && <span className="field-error">{errors.telefone}</span>}
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Tipo de Tratamento</label>
-                <select
-                  name="tipo_tratamento"
-                  className="form-select"
-                  value={formData.tipo_tratamento}
-                  onChange={handleInputChange}
-                  disabled={loading}
-                >
-                  <option value="">Selecione (opcional)</option>
-                  <option value="Estético">Tratamento Estético</option>
-                  <option value="Odontológico">Tratamento Odontológico</option>
-                  <option value="Ambos">Ambos os Tratamentos</option>
-                </select>
-              </div>
+              
 
               <div className="form-group">
                 <label className="form-label">CPF *</label>
@@ -542,34 +512,14 @@ const CapturaLead = () => {
                   <div className="loading-spinner"></div>
                 ) : (
                   <>
-                    <span>Agendar Consulta Gratuita</span>
-                    <div className="btn-icon">🚀</div>
+                    <span>Enviar</span>
+                    <div className="btn-icon"></div>
                   </>
                 )}
               </button>
             </form>
           </div>
 
-          {/* Depoimentos */}
-          <div className="captura-testimonials">
-            <h3 className="testimonials-title">O que nossos pacientes dizem</h3>
-            <div className="testimonials-grid">
-              <div className="testimonial-card">
-                <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p className="testimonial-text">
-                  "Profissionais incríveis! Mudaram completamente meu sorriso e minha autoestima."
-                </p>
-                <div className="testimonial-author">- Maria Silva</div>
-              </div>
-              <div className="testimonial-card">
-                <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p className="testimonial-text">
-                  "Atendimento excepcional e resultados que superaram minhas expectativas."
-                </p>
-                <div className="testimonial-author">- João Santos</div>
-              </div>
-            </div>
-          </div>
 
           {/* Footer */}
           <div className="captura-footer">
@@ -593,7 +543,7 @@ const CapturaLead = () => {
       <style jsx>{`
         .captura-lead-container {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg,rgb(7, 30, 132) 0%,rgb(7, 3, 102) 100%);
           position: relative;
           overflow-x: hidden;
         }
@@ -753,7 +703,7 @@ const CapturaLead = () => {
         .form-select:focus,
         .form-textarea:focus {
           outline: none;
-          border-color: #667eea;
+          border-color:rgb(7, 27, 116);
           box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
@@ -776,7 +726,7 @@ const CapturaLead = () => {
         }
 
         .captura-submit-btn {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg,rgb(4, 20, 91) 0%,rgb(13, 11, 157) 100%);
           color: white;
           border: none;
           padding: 18px 30px;

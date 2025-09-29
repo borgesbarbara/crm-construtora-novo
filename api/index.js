@@ -178,18 +178,18 @@ const buscarDadosRelacionados = async (dados, tipoRelacao) => {
         const consultorIds = [...new Set(dados.map(item => item.consultor_id).filter(id => id))];
         if (consultorIds.length > 0) {
           const { data: consultores } = await supabase
-            .from('consultores')
+            .from('corretores')
             .select('id, nome')
             .in('id', consultorIds);
           
-          const consultoresMap = consultores?.reduce((map, c) => {
+          const corretoresMap = corretores?.reduce((map, c) => {
             map[c.id] = c.nome;
             return map;
           }, {}) || {};
 
           return dados.map(item => ({
             ...item,
-            consultor_nome: consultoresMap[item.consultor_id] || null
+            consultor_nome: corretoresMap[item.consultor_id] || null
           }));
         }
         break;
@@ -354,7 +354,7 @@ app.post('/api/login', async (req, res) => {
       console.log('🔍 Buscando consultor por email:', emailNormalizado);
       
       const { data: consultores, error } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('*')
         .eq('email', emailNormalizado)
         .limit(1);
@@ -571,7 +571,7 @@ app.get('/api/verify-token', authenticateToken, async (req, res) => {
     } else {
       // Se não achou em usuarios, buscar em consultores
       const { data: consultorData, error: errorConsultor } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('*')
         .eq('id', req.user.id)
         .eq('ativo', true)
@@ -781,7 +781,7 @@ app.put('/api/clinicas/:id', authenticateToken, requireAdmin, async (req, res) =
 app.get('/api/consultores', authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('*')
       .order('nome');
 
@@ -810,7 +810,7 @@ app.post('/api/consultores', authenticateToken, requireAdmin, async (req, res) =
     
     // Verificar se email já existe
     const { data: emailExistente, error: emailError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('email', emailNormalizado)
       .limit(1);
@@ -826,7 +826,7 @@ app.post('/api/consultores', authenticateToken, requireAdmin, async (req, res) =
     const senhaHash = await bcrypt.hash(senha, saltRounds);
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .insert([{ nome, telefone, email: emailNormalizado, senha: senhaHash, pix }])
       .select();
 
@@ -863,7 +863,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     
     // Validar se email já existe
     const { data: emailExistente, error: emailError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('email', emailNormalizado)
       .limit(1);
@@ -876,7 +876,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     
     // Validar se CPF já existe
     const { data: cpfExistente, error: cpfError } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('id')
       .eq('cpf', cpf)
       .limit(1);
@@ -894,7 +894,7 @@ app.post('/api/consultores/cadastro', async (req, res) => {
     // Inserir consultor
     console.log('💾 Tentando inserir consultor no Supabase...');
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .insert([{ 
         nome, 
         telefone, 
@@ -1063,7 +1063,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
       
       // Verificar se email já existe em outro consultor
       const { data: emailExistente, error: emailError } = await supabase
-        .from('consultores')
+        .from('corretores')
         .select('id')
         .eq('email', emailNormalizado)
         .neq('id', id)
@@ -1085,7 +1085,7 @@ app.put('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
     }
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .update(updateData)
       .eq('id', id)
       .select();
@@ -1107,7 +1107,7 @@ app.get('/api/consultores/:id', authenticateToken, requireAdmin, async (req, res
     const { id } = req.params;
     
     const { data, error } = await supabase
-      .from('consultores')
+      .from('corretores')
       .select('*')
       .eq('id', id)
       .single();
@@ -1634,7 +1634,7 @@ app.get('/api/agendamentos', authenticateToken, async (req, res) => {
       ...agendamento,
       paciente_nome: agendamento.pacientes?.nome,
       paciente_telefone: agendamento.pacientes?.telefone,
-      consultor_nome: agendamento.consultores?.nome,
+      consultor_nome: agendamento.corretores?.nome,
       clinica_nome: agendamento.clinicas?.nome
     }));
 
@@ -1661,7 +1661,7 @@ app.get('/api/dashboard/agendamentos', authenticateToken, async (req, res) => {
       ...agendamento,
       paciente_nome: agendamento.pacientes?.nome,
       paciente_telefone: agendamento.pacientes?.telefone,
-      consultor_nome: agendamento.consultores?.nome,
+      consultor_nome: agendamento.corretores?.nome,
       clinica_nome: agendamento.clinicas?.nome
     }));
 
@@ -1840,7 +1840,7 @@ app.get('/api/fechamentos', authenticateToken, async (req, res) => {
       paciente_nome: fechamento.pacientes?.nome,
       paciente_telefone: fechamento.pacientes?.telefone,
       paciente_cpf: fechamento.pacientes?.cpf,
-      consultor_nome: fechamento.consultores?.nome,
+      consultor_nome: fechamento.corretores?.nome,
       clinica_nome: fechamento.clinicas?.nome
     }));
 
@@ -1869,7 +1869,7 @@ app.get('/api/dashboard/fechamentos', authenticateToken, async (req, res) => {
       paciente_nome: fechamento.pacientes?.nome,
       paciente_telefone: fechamento.pacientes?.telefone,
       paciente_cpf: fechamento.pacientes?.cpf,
-      consultor_nome: fechamento.consultores?.nome,
+      consultor_nome: fechamento.corretores?.nome,
       clinica_nome: fechamento.clinicas?.nome
     }));
 
@@ -2663,7 +2663,7 @@ app.get('/api/dashboard', authenticateToken, async (req, res) => {
 
     // Buscar consultores
     let consultoresQuery = supabase
-      .from('consultores')
+      .from('corretores')
       .select('id, nome');
 
     // Se for consultor, buscar apenas dados dele

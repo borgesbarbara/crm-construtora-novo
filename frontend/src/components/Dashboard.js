@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [estadosDisponiveis, setEstadosDisponiveis] = useState([]);
   const [rankingGeral, setRankingGeral] = useState([]);
   const [loadingRanking, setLoadingRanking] = useState(true);
-  const [showConsultoresExtrasModal, setShowConsultoresExtrasModal] = useState(false); // Modal dos consultores do 4º em diante
+    const [showConsultoresExtrasModal, setShowConsultoresExtrasModal] = useState(false); // Modal dos corretores do 4º em diante
   const [stats, setStats] = useState({
     totalPacientes: 0,
     totalAgendamentos: 0,
@@ -977,7 +977,7 @@ const Dashboard = () => {
         </h3>
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-label">Total de Pacientes</div>
+            <div className="stat-label">Total de Clientes</div>
             <div className="stat-value">{kpisPrincipais.totalPacientes}</div>
             <div className={`stat-change ${(isAdmin ? stats.crescimentoPacientes : crescimentosFiltrados.crescimentoPacientes) >= 0 ? 'positive' : 'negative'}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1187,10 +1187,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Ranking dos Consultores */}
+        {/* Ranking dos Corretores */}
         <div className="card" style={{ minWidth: 0 }}>
           <div className="card-header">
-            <h2 className="card-title">🏆 Ranking dos Consultores</h2>
+            <h2 className="card-title">🏆 Ranking dos Corretores</h2>
             <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>
               Classificação por valor fechado
             </p>
@@ -1383,7 +1383,7 @@ const Dashboard = () => {
                               }}>
                                 <div style={{ textAlign: 'center' }}>
                                   <div style={{ fontWeight: '600' }}>{consultor.totalPacientes}</div>
-                                  <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>pacientes</div>
+                                  <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>clientes</div>
                                 </div>
                                 <div style={{ textAlign: 'center' }}>
                                   <div style={{ fontWeight: '600', color: '#3b82f6' }}>{consultor.totalAgendamentos}</div>
@@ -1557,7 +1557,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Modal dos Valores Financeiros do Consultor */}
+      {/* Modal dos Valores Financeiros do Corretor */}
       {showConsultoresExtrasModal && (
         <div 
           style={{
