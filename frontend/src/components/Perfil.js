@@ -49,7 +49,6 @@ const Perfil = () => {
     }
   }, [user, makeRequest]);
 
-  // Função para obter iniciais do nome
   const getUserInitials = () => {
     if (user.nome) {
       const names = user.nome.split(' ');

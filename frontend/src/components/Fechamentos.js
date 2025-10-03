@@ -4,7 +4,7 @@ import { useToast } from '../components/Toast';
 import config from '../config';
 
 const Fechamentos = () => {
-  const { makeRequest, isAdmin } = useAuth();
+  const { makeRequest, isAdmin, user } = useAuth();
   const [fechamentos, setFechamentos] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [consultores, setConsultores] = useState([]);
@@ -267,7 +267,7 @@ const Fechamentos = () => {
       setFechamentoEditando(null);
       setNovoFechamento({
         paciente_id: '',
-        consultor_id: '',
+        consultor_id: user?.consultor_id ? String(user.consultor_id) : '',
         clinica_id: '',
         valor_fechado: '',
         valor_formatado: '',
@@ -524,18 +524,16 @@ const Fechamentos = () => {
       const paciente = pacientes.find(p => p.id === parseInt(pacienteId));
       
       if (paciente && paciente.consultor_id) {
-        // Se o paciente tem consultor, selecionar automaticamente
         setNovoFechamento(prev => ({
           ...prev,
           paciente_id: pacienteId,
           consultor_id: paciente.consultor_id.toString()
         }));
       } else {
-        // Se não tem consultor, manter vazio
         setNovoFechamento(prev => ({
           ...prev,
           paciente_id: pacienteId,
-          consultor_id: ''
+          consultor_id: user?.consultor_id ? String(user.consultor_id) : ''
         }));
       }
       
@@ -910,7 +908,7 @@ const Fechamentos = () => {
                   onChange={(e) => handlePacienteChange(e.target.value)}
                   required
                 >
-                  <option value="">Selecione um paciente</option>
+                  <option value="">Selecione um Cliente</option>
                   {pacientes.filter(p => 
                     // Mostrar apenas pacientes com status apropriados para fechamento
                     ['agendado', 'compareceu', 'fechado'].includes(p.status)
@@ -942,7 +940,7 @@ const Fechamentos = () => {
                     value={novoFechamento.consultor_id || ''}
                     onChange={(e) => setNovoFechamento({...novoFechamento, consultor_id: e.target.value})}
                   >
-                    <option value="">Selecione um consultor</option>
+                    <option value="">Selecione um corretor</option>
                     {consultores.map(c => (
                       <option key={c.id} value={c.id}>{c.nome}</option>
                     ))}
@@ -951,13 +949,13 @@ const Fechamentos = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Clínica</label>
+                <label className="form-label">Empreendimento</label>
                 <select 
                   className="form-select"
                   value={novoFechamento.clinica_id || ''}
                   onChange={(e) => setNovoFechamento({...novoFechamento, clinica_id: e.target.value})}
                 >
-                  <option value="">Selecione uma clínica</option>
+                  <option value="">Selecione um empreendimento</option>
                   {clinicas.map(c => (
                     <option key={c.id} value={c.id}>{c.nome}</option>
                   ))}
@@ -973,19 +971,6 @@ const Fechamentos = () => {
                     value={novoFechamento.data_fechamento}
                     onChange={(e) => setNovoFechamento({...novoFechamento, data_fechamento: e.target.value})}
                   />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Tipo de Tratamento</label>
-                  <select 
-                    className="form-select"
-                    value={novoFechamento.tipo_tratamento || ''}
-                    onChange={(e) => setNovoFechamento({...novoFechamento, tipo_tratamento: e.target.value})}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Estético">Estético</option>
-                    <option value="Odontológico">Odontológico</option>
-                  </select>
                 </div>
               </div>
 

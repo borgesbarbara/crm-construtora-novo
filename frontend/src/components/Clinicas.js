@@ -14,7 +14,7 @@ const Clinicas = () => {
   const [showNovaClinicaModal, setShowNovaClinicaModal] = useState(false);
   const [editingClinica, setEditingClinica] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false); // Estado para prevenir cliques duplos
+  const [submitting, setSubmitting] = useState(false); 
   const [submittingNovaClinica, setSubmittingNovaClinica] = useState(false); // Estado para nova clínica
   const [activeTab, setActiveTab] = useState('clinicas');
   const [filtroEstado, setFiltroEstado] = useState('');

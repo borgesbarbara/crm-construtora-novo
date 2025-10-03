@@ -216,7 +216,7 @@ const Pacientes = () => {
         showErrorToast('Erro ao carregar pacientes: ' + data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar pacientes:', error);
+      console.error('Erro ao carregar clientes:', error);
       showErrorToast('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);
@@ -231,10 +231,10 @@ const Pacientes = () => {
       if (response.ok) {
         setConsultores(data);
       } else {
-        console.error('Erro ao carregar consultores:', data.error);
+        console.error('Erro ao carregar corretores:', data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar consultores:', error);
+      console.error('Erro ao carregar corretores:', error);
     }
   };
 
@@ -246,10 +246,10 @@ const Pacientes = () => {
       if (response.ok) {
         setClinicas(data);
       } else {
-        console.error('Erro ao carregar clínicas:', data.error);
+        console.error('Erro ao carregar empreendimentos:', data.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar clínicas:', error);
+      console.error('Erro ao carregar empreendimentos:', error);
     }
   };
 
@@ -310,7 +310,7 @@ const Pacientes = () => {
       const data = await response.json();
       
       if (response.ok) {
-        showSuccessToast(editingPaciente ? 'Paciente atualizado com sucesso!' : 'Paciente cadastrado com sucesso!');
+        showSuccessToast(editingPaciente ? 'Cliente atualizado com sucesso!' : 'Cliente cadastrado com sucesso!');
         setShowModal(false);
         setEditingPaciente(null);
         setFormData({
@@ -326,11 +326,11 @@ const Pacientes = () => {
         });
         fetchPacientes();
       } else {
-        showErrorToast('Erro ao salvar paciente: ' + data.error);
+        showErrorToast('Erro ao salvar cliente: ' + data.error);
       }
     } catch (error) {
-      console.error('Erro ao salvar paciente:', error);
-      showErrorToast('Erro ao salvar paciente');
+      console.error('Erro ao salvar cliente:', error);
+      showErrorToast('Erro ao salvar cliente');
     }
   };
 
@@ -601,7 +601,7 @@ const Pacientes = () => {
       });
 
       if (response.ok) {
-        showSuccessToast('Paciente excluído com sucesso!');
+        showSuccessToast('Cliente excluído com sucesso!');
         
         // Atualizar estado local removendo o paciente
         setPacientes(prevPacientes => 
@@ -617,11 +617,11 @@ const Pacientes = () => {
         window.dispatchEvent(new CustomEvent('data_updated', { detail: { timestamp } }));
       } else {
         const data = await response.json();
-        showErrorToast('Erro ao excluir paciente: ' + (data.error || 'Erro desconhecido'));
+        showErrorToast('Erro ao excluir cliente: ' + (data.error || 'Erro desconhecido'));
       }
     } catch (error) {
-      console.error('Erro ao excluir paciente:', error);
-      showErrorToast('Erro ao excluir paciente');
+      console.error('Erro ao excluir cliente:', error);
+      showErrorToast('Erro ao excluir cliente');
     }
   };
 
@@ -1035,14 +1035,7 @@ const Pacientes = () => {
                   </div>
                 </div>
                 <div className="grid grid-4" style={{ gap: '1rem' }}>
-                  <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">Tipo de Tratamento</label>
-                    <select className="form-select" value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)}>
-                      <option value="">Todos</option>
-                      <option value="Estético">Estético</option>
-                      <option value="Odontológico">Odontológico</option>
-                    </select>
-                  </div>
+                  
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">Status</label>
                     <select className="form-select" value={filtroStatus} onChange={e => setFiltroStatus(e.target.value)}>
@@ -1423,7 +1416,7 @@ const Pacientes = () => {
           <div className="modal">
             <div className="modal-header">
               <h2 className="modal-title">
-                {editingPaciente ? 'Editar Paciente' : 'Novo Paciente'}
+                {editingPaciente ? 'Editar Cliente' : 'Novo Cliente'}
               </h2>
               <button className="close-btn" onClick={resetForm}>
                 ×
@@ -1543,20 +1536,7 @@ const Pacientes = () => {
 
 
               <div className="grid grid-2">
-                <div className="form-group">
-                  <label className="form-label">Tipo de Tratamento</label>
-                  <select
-                    name="tipo_tratamento"
-                    className="form-select"
-                    value={formData.tipo_tratamento}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Estético">Estético</option>
-                    <option value="Odontológico">Odontológico</option>
-                    <option value="Ambos">Ambos</option>
-                  </select>
-                </div>
+                
 
                 {/* Remover o campo de status do formulário/modal de cadastro/edição: */}
                 {/* Substituir o bloco: */}
@@ -1614,7 +1594,7 @@ const Pacientes = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h2 className="modal-title">Visualizar Paciente</h2>
+              <h2 className="modal-title">Visualizar Cliente</h2>
               <button className="close-btn" onClick={() => setShowViewModal(false)}>×</button>
             </div>
             <div style={{ padding: '1.5rem' }}>
@@ -1639,10 +1619,6 @@ const Pacientes = () => {
               </div>
 
               <div className="grid grid-2">
-                <div className="form-group">
-                  <label className="form-label">Tipo de Tratamento</label>
-                  <input type="text" className="form-input" value={viewPaciente.tipo_tratamento || '-'} readOnly />
-                </div>
                 <div className="form-group">
                   <label className="form-label">Status</label>
                   <input type="text" className="form-input" value={getStatusInfo(viewPaciente.status).label || '-'} readOnly />
@@ -1832,7 +1808,7 @@ const Pacientes = () => {
                   marginBottom: '1rem',
                   lineHeight: '1.5'
                 }}>
-                  <strong>Paciente:</strong> {pacienteParaFechar?.nome}
+                  <strong>Cliente:</strong> {pacienteParaFechar?.nome}
                 </p>
                 <p style={{ 
                   color: '#6b7280', 
@@ -1874,18 +1850,6 @@ const Pacientes = () => {
               </div>
 
               <div className="grid grid-2" style={{ gap: '1rem', marginBottom: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">Tipo de Tratamento</label>
-                  <select 
-                    className="form-select"
-                    value={tipoTratamentoFechamento}
-                    onChange={(e) => setTipoTratamentoFechamento(e.target.value)}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Estético">Estético</option>
-                    <option value="Odontológico">Odontológico</option>
-                  </select>
-                </div>
 
                 <div className="form-group">
                   <label className="form-label">Data do Fechamento</label>

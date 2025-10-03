@@ -1,6 +1,6 @@
 # 🔧 Correção do Problema WhatsApp em Produção (Vercel)
 
-## 🚨 **Problema Identificado**
+##  **Problema Identificado**
 
 **Erro em produção:**
 ```

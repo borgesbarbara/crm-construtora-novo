@@ -1824,11 +1824,16 @@ app.post('/api/fechamentos', authenticateUpload, upload.single('contrato'), asyn
       return res.status(400).json({ error: 'Contrato em PDF é obrigatório!' });
     }
 
-    // Converter campos opcionais para null se não enviados ou vazios
-    const consultorId = consultor_id && consultor_id !== '' ? 
-      (typeof consultor_id === 'number' ? consultor_id : parseInt(consultor_id)) : null;
-    const clinicaId = clinica_id && clinica_id !== '' ? 
-      (typeof clinica_id === 'number' ? clinica_id : parseInt(clinica_id)) : null;
+        // Converter campos opcionais para null se não enviados ou vazios
+        const consultorId = consultor_id && consultor_id !== '' ? 
+        (typeof consultor_id === 'number' ? consultor_id : parseInt(consultor_id)) : null;
+      const clinicaId = clinica_id && clinica_id !== '' ? 
+        (typeof clinica_id === 'number' ? clinica_id : parseInt(clinica_id)) : null;
+  
+      // Se o usuário logado for corretor e consultor_id não vier, usar o do token
+      const effectiveConsultorId = (consultorId !== null && !isNaN(consultorId))
+        ? consultorId
+        : (req.user?.tipo === 'consultor' ? req.user.consultor_id : null);
 
     // Validar valor_fechado para garantir que não seja null/NaN
     const valorFechado = parseFloat(valor_fechado);
@@ -1861,7 +1866,7 @@ app.post('/api/fechamentos', authenticateUpload, upload.single('contrato'), asyn
       .from('fechamentos')
       .insert([{
         paciente_id: parseInt(paciente_id),
-        consultor_id: consultorId,
+        consultor_id: effectiveConsultorId,
         clinica_id: clinicaId,
         valor_fechado: valorFechado,
         data_fechamento,
